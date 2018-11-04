@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>quiz-philip</name>
-	<description>Demo project for Spring Boot</description>
+	<description>A Java Project</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

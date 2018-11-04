@@ -3,7 +3,7 @@ package fr.epita.sp18.quizphilip.entity;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-public class Teacher extends EntityAbstract
+public class Identity extends EntityAbstract
 {
     private String name;
     private String email;

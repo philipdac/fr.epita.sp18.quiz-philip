@@ -1,0 +1,42 @@
+TEACHER ROLE:
+
+	/quizzes
+		GET list of all quizzes
+		POST create a new quiz
+					
+	/quizzes/{id}
+		CRUD a specific quiz
+	
+	/quizzes/{id}/questions
+		GET list of all questions of a specific quiz {id}
+		POST create a new question of a specific quiz {id}
+	
+	/quizzes/{id}/questions/{questId}	
+		CRUD a specific question
+	
+	/quizzes/{id}/student
+		GET list of student that taken this quiz
+
+	/evaluation/{quiz-student-id}
+		GET list of questions & answer of a pair quiz-student
+
+	/evaluation/{quiz-student-id}/questions/{questId}
+		PUT update the score of a specific question {questId}
+
+STUDENT ROLE:
+
+	/quizzes/active
+		GET list of active quiz, available for quizzing the student
+	
+	/my-quizzes
+		GET list of quiz that a student has taken, specified by student name in the request parameter
+		POST create a new quiz test for a student, specified by student name
+
+	/my-quizzes/{quiz-student-id}
+		GET list of questions of a pair quiz-student, question order may get shuffled
+
+	/my-quizzes/{quiz-student-id}/questions/{questId}
+		PUT update the answer for a specific question {questId}
+
+	/my-quizzes/{quiz-student-id}/result
+		GET quiz result
