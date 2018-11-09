@@ -1,27 +1,36 @@
 package fr.epita.sp18.quizphilip.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import fr.epita.sp18.quizphilip.common.ChoiceNumber;
 import fr.epita.sp18.quizphilip.common.ChoiceType;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
-public class QuestionChoice extends EntityAbstract {
-    private Long   questionId;
+@Entity
+public class QuestionChoice {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long questionChoiceId;
     private ChoiceNumber choiceNumber;
-    private String description;
     private boolean correctChoice;
     private ChoiceType choiceType;
+    private String description;
     private Float score;
+    
+    @ManyToOne
+    @JoinColumn(name = "questionId")
+    @JsonBackReference
+    private Question question;
 
-    public Long getQuestionId()
+    public Long getQuestionChoiceId()
     {
-        return questionId;
+        return questionChoiceId;
     }
     
-    public void setQuestionId(Long questionId)
+    public void setQuestionChoiceId(Long questionChoiceId)
     {
-        this.questionId = questionId;
+        this.questionChoiceId = questionChoiceId;
     }
     
     public ChoiceNumber getChoiceNumber()
@@ -34,16 +43,6 @@ public class QuestionChoice extends EntityAbstract {
         this.choiceNumber = choiceNumber;
     }
     
-    public String getDescription()
-    {
-        return description;
-    }
-    
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
-    
     public boolean getCorrectChoice()
     {
         return correctChoice;
@@ -53,7 +52,7 @@ public class QuestionChoice extends EntityAbstract {
     {
         this.correctChoice = correctChoice;
     }
-    
+
     public ChoiceType getChoiceType()
     {
         return choiceType;
@@ -64,6 +63,16 @@ public class QuestionChoice extends EntityAbstract {
         this.choiceType = choiceType;
     }
     
+    public String getDescription()
+    {
+        return description;
+    }
+    
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+    
     public float getScore()
     {
         return score;
@@ -72,5 +81,15 @@ public class QuestionChoice extends EntityAbstract {
     public void setScore(float score)
     {
         this.score = score;
+    }
+    
+    public Question getQuestion()
+    {
+        return question;
+    }
+    
+    public void setQuestion(Question question)
+    {
+        this.question = question;
     }
 }

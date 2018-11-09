@@ -1,10 +1,13 @@
 package fr.epita.sp18.quizphilip.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+@Entity
 public class Identity extends EntityAbstract
 {
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    protected Long id;
     private String name;
     private String email;
     private String normalizedEmail;

@@ -1,18 +1,33 @@
 package fr.epita.sp18.quizphilip.entity;
 
-import fr.epita.sp18.quizphilip.common.QuizStatus;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import fr.epita.sp18.quizphilip.common.ShuffleType;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
-public class Quiz extends EntityAbstract {
+@Entity
+public class Quiz {
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Long quizId;
+    
     private Long teacherId;
     private String title;
-    private QuizStatus status;
-    private String roomName;
     private Integer duration;
     private ShuffleType shuffleType;
+    
+    @OneToMany(mappedBy = "quiz")
+    @JsonManagedReference
+    private List<Question> questions;
+    
+    public Long getQuizId() {
+        return quizId;
+    }
+    
+    public void setQuizId(Long quizId) {
+        this.quizId = quizId;
+    }
     
     public Long getTeacherId()
     {
@@ -34,26 +49,6 @@ public class Quiz extends EntityAbstract {
         this.title = title;
     }
     
-    public QuizStatus getStatus()
-    {
-        return status;
-    }
-    
-    public void setStatus(QuizStatus status)
-    {
-        this.status = status;
-    }
-    
-    public String getRoomName()
-    {
-        return roomName;
-    }
-    
-    public void setRoomName(String roomName)
-    {
-        this.roomName = roomName;
-    }
-    
     public Integer getDuration()
     {
         return duration;
@@ -72,5 +67,15 @@ public class Quiz extends EntityAbstract {
     public void setShuffleType(ShuffleType shuffleType)
     {
         this.shuffleType = shuffleType;
+    }
+    
+    public List<Question> getQuestions()
+    {
+        return questions;
+    }
+    
+    public void setQuestion(List<Question> questions)
+    {
+        this.questions = questions;
     }
 }

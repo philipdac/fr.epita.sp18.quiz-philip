@@ -1,3 +1,19 @@
+USER STORIES
+
+As a teacher, I want to login into the system to work privately
+
+As a teacher, I want to make a quiz with following features:
+    - A quiz can have many questions
+    - A question can be 1/ answered by a single choice, 2/ multiple choices or 3/ open for student to write his/her own answer
+
+A exam happens at a specific time and room, use a specific quiz
+
+As a teacher, I want to make a quiz with following features:
+A quiz can be used by many exams
+
+
+exams
+
 TEACHER ROLE:
 
 	/api/quizzes
@@ -14,10 +30,18 @@ TEACHER ROLE:
 	/api/quizzes/{id}/questions/{questId}	
 		CRUD a specific question
 	
-	/api/quizzes/{id}/student
-		GET list of student that taken this quiz
+	/api/quizzes/{id}/exams
+		GET list of exams that used with this quiz
 
-	/api/evaluation/{quiz-student-id}
+	/api/exams
+		GET list of exams that run by the logged in teacher
+
+	/api/exams/{id}
+		GET list of students that taken this exam
+
+	/api/exams/{id}/students/{exam-student-id}
+
+	/api/exams/{id}/scoring/{exam-student-id}
 		GET list of questions & answer of a pair quiz-student
 
 	/api/evaluation/{quiz-student-id}/questions/{questId}
@@ -25,18 +49,18 @@ TEACHER ROLE:
 
 STUDENT ROLE:
 
-	/api/quizzes/active
+	/api/exams/active
 		GET list of active quiz, available for quizzing the student
 	
-	/api/my-quizzes
+	/api/exams
 		GET list of quiz that a student has taken, specified by student name in the request parameter
 		POST create a new quiz test for a student, specified by student name
 
-	/api/my-quizzes/{quiz-student-id}
+	/api/exams/{quiz-student-id}
 		GET list of questions of a pair quiz-student, question order may get shuffled
 
-	/api/my-quizzes/{quiz-student-id}/questions/{questId}
+	/api/exams/{quiz-student-id}/questions/{questId}
 		PUT update the answer for a specific question {questId}
 
-	/api/my-quizzes/{quiz-student-id}/result
+	/api/exams/{quiz-student-id}/result
 		GET quiz result
