@@ -2,10 +2,7 @@ package fr.epita.sp18.quizphilip.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import fr.epita.sp18.quizphilip.common.ChoiceNumber;
-import fr.epita.sp18.quizphilip.common.ChoiceType;
-
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class QuestionChoice {
@@ -14,7 +11,6 @@ public class QuestionChoice {
     private Long questionChoiceId;
     private ChoiceNumber choiceNumber;
     private boolean correctChoice;
-    private ChoiceType choiceType;
     private String description;
     private Float score;
     
@@ -53,16 +49,6 @@ public class QuestionChoice {
         this.correctChoice = correctChoice;
     }
 
-    public ChoiceType getChoiceType()
-    {
-        return choiceType;
-    }
-    
-    public void setChoiceType(ChoiceType choiceType)
-    {
-        this.choiceType = choiceType;
-    }
-    
     public String getDescription()
     {
         return description;

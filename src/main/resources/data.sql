@@ -12,6 +12,6 @@ INSERT INTO QUESTION
   VALUES (2, '', 'public class Test{}', 4, 1.0, 0, 'What will happen when you compile and run the following code?', 1, 1);
 
 INSERT INTO QUESTION_CHOICE
-  VALUES (1, 1, 0, 0, 'Parent Hello', 0, 1);
+  VALUES (1, 1, 0, 'Parent Hello', 0, 1);
 INSERT INTO QUESTION_CHOICE
-  VALUES (2, 2, 0, 0, 'Child Hello', 0, 1);
+  VALUES (2, 2, 0, 'Child Hello', 0, 1);
