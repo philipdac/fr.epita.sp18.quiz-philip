@@ -1,5 +1,6 @@
 package fr.epita.sp18.quizphilip.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import fr.epita.sp18.quizphilip.common.ShuffleType;
 
@@ -7,6 +8,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Quiz {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -20,6 +22,10 @@ public class Quiz {
     @OneToMany(mappedBy = "quiz")
     @JsonManagedReference
     private List<Question> questions;
+    
+    @OneToMany(mappedBy = "quiz")
+    @JsonManagedReference
+    private List<Exam> exams;
     
     public Long getQuizId() {
         return quizId;
@@ -77,5 +83,15 @@ public class Quiz {
     public void setQuestion(List<Question> questions)
     {
         this.questions = questions;
+    }
+    
+    public List<Exam> getExams()
+    {
+        return exams;
+    }
+    
+    public void setExams(List<Exam> exams)
+    {
+        this.exams = exams;
     }
 }

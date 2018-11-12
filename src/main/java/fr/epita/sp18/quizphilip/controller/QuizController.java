@@ -2,11 +2,9 @@ package fr.epita.sp18.quizphilip.controller;
 
 import fr.epita.sp18.quizphilip.entity.Quiz;
 import fr.epita.sp18.quizphilip.service.QuizService;
+import model.QuizSnapshot;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,10 +20,16 @@ public class QuizController
         this.service = service;
     }
     
-    @GetMapping()
-    public List<Quiz> list()
+    @GetMapping("/{quizId}")
+    public Quiz get(@PathVariable Long quizId)
     {
-        return service.list();
+        return service.get(quizId);
+    }
+    
+    @GetMapping()
+    public List<QuizSnapshot> list(@RequestParam("teacherId") long teacherId)
+    {
+        return service.list(teacherId);
     }
     
     @PostMapping()
