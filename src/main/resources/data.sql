@@ -1,7 +1,7 @@
 INSERT INTO IDENTITY
 	VALUES(1, 'Admin', 'admin@email.com', 'ADMIN@EMAIL.COM', '$2a$10$0J2aOmp.TkDLpMX8SpRNH.D171jC8i02Zcalng6QtfCGlM/y1luSG');
 INSERT INTO IDENTITY
-	VALUES(2, 'Teacher', 'teacher@email.com', 'TEACHER@EMAIL.COM', '$2a$10$0J2aOmp.TkDLpMX8SpRNH.D171jC8i02Zcalng6QtfCGlM/y1luSG');
+	VALUES(2, 'Mr. Teacher', 'teacher@email.com', 'TEACHER@EMAIL.COM', '$2a$10$0J2aOmp.TkDLpMX8SpRNH.D171jC8i02Zcalng6QtfCGlM/y1luSG');
 
 INSERT INTO QUIZ
   VALUES (1, 20, 0, 1, 'Java Language Basics Quiz');

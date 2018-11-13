@@ -1,9 +1,6 @@
 package model;
 
 import fr.epita.sp18.quizphilip.common.ShuffleType;
-import fr.epita.sp18.quizphilip.entity.Exam;
-
-import java.util.List;
 
 public class QuizSnapshot
 {
@@ -11,17 +8,20 @@ public class QuizSnapshot
     private String title;
     private Integer duration;
     private ShuffleType shuffleType;
-    private List<Exam> exams;
+    private Integer questionCount;
+    private Integer examCount;
     private Long teacherId;
     private String teacherName;
     
-    public QuizSnapshot(Long quizId, String title, Integer duration, ShuffleType shuffleType, List<Exam> exams, Long teacherId)
+    public QuizSnapshot(Long quizId, String title, Integer duration, ShuffleType shuffleType,
+            Integer questionCount, Integer examCount, Long teacherId)
     {
         this.quizId = quizId;
         this.title = title;
         this.duration = duration;
         this.shuffleType = shuffleType;
-        this.exams = exams;
+        this.questionCount = questionCount;
+        this.examCount = examCount;
         this.teacherId = teacherId;
     }
     
@@ -65,14 +65,24 @@ public class QuizSnapshot
         this.shuffleType = shuffleType;
     }
     
-    public List<Exam> getExams()
+    public Integer getQuestionCount()
     {
-        return exams;
+        return questionCount;
     }
     
-    public void setExams(List<Exam> exams)
+    public void setQuestionCount(Integer questionCount)
     {
-        this.exams = exams;
+        this.questionCount = questionCount;
+    }
+    
+    public Integer getExamCount()
+    {
+        return examCount;
+    }
+    
+    public void setExamCount(Integer examCount)
+    {
+        this.examCount = examCount;
     }
     
     public Long getTeacherId()
