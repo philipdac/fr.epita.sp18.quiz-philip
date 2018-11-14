@@ -1,12 +1,10 @@
 package fr.epita.sp18.quizphilip.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import fr.epita.sp18.quizphilip.common.ExamStatus;
 import fr.epita.sp18.quizphilip.common.ShuffleType;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class Exam
@@ -18,6 +16,7 @@ public class Exam
     private String examDesc;
     private String examRoom;
     private ExamStatus examStatus;
+    private ShuffleType shuffleType;
     
     @ManyToOne
     @JoinColumn(name = "quizId")
@@ -62,6 +61,16 @@ public class Exam
     public void setExamStatus(ExamStatus examStatus)
     {
         this.examStatus = examStatus;
+    }
+    
+    public ShuffleType getShuffleType()
+    {
+        return shuffleType;
+    }
+    
+    public void setShuffleType(ShuffleType shuffleType)
+    {
+        this.shuffleType = shuffleType;
     }
     
     public Quiz getQuiz()

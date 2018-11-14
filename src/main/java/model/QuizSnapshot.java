@@ -7,19 +7,17 @@ public class QuizSnapshot
     private Long quizId;
     private String title;
     private Integer duration;
-    private ShuffleType shuffleType;
     private Integer questionCount;
     private Integer examCount;
     private Long teacherId;
     private String teacherName;
     
-    public QuizSnapshot(Long quizId, String title, Integer duration, ShuffleType shuffleType,
+    public QuizSnapshot(Long quizId, String title, Integer duration,
             Integer questionCount, Integer examCount, Long teacherId)
     {
         this.quizId = quizId;
         this.title = title;
         this.duration = duration;
-        this.shuffleType = shuffleType;
         this.questionCount = questionCount;
         this.examCount = examCount;
         this.teacherId = teacherId;
@@ -53,16 +51,6 @@ public class QuizSnapshot
     public void setDuration(Integer duration)
     {
         this.duration = duration;
-    }
-    
-    public ShuffleType getShuffleType()
-    {
-        return shuffleType;
-    }
-    
-    public void setShuffleType(ShuffleType shuffleType)
-    {
-        this.shuffleType = shuffleType;
     }
     
     public Integer getQuestionCount()

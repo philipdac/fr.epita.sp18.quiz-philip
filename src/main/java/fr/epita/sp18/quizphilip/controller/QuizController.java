@@ -33,8 +33,15 @@ public class QuizController
     }
     
     @PostMapping()
-    public Integer create()
+    public Long create(@RequestBody Quiz quiz)
     {
-        return service.create();
+        quiz.setQuizId(null);
+        return service.save(quiz);
+    }
+    
+    @PutMapping("/{quizId}")
+    public Long update(@PathVariable Long quizId, @RequestBody Quiz quiz)
+    {
+        return service.save(quiz);
     }
 }

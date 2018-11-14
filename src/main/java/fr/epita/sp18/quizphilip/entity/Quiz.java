@@ -2,7 +2,6 @@ package fr.epita.sp18.quizphilip.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import fr.epita.sp18.quizphilip.common.ShuffleType;
 
 import javax.persistence.*;
 import java.util.List;
@@ -17,7 +16,6 @@ public class Quiz {
     private Long teacherId;
     private String title;
     private Integer duration;
-    private ShuffleType shuffleType;
     
     @OneToMany(mappedBy = "quiz")
     @JsonManagedReference
@@ -63,16 +61,6 @@ public class Quiz {
     public void setDuration(Integer duration)
     {
         this.duration = duration;
-    }
-    
-    public ShuffleType getShuffleType()
-    {
-        return shuffleType;
-    }
-    
-    public void setShuffleType(ShuffleType shuffleType)
-    {
-        this.shuffleType = shuffleType;
     }
     
     public List<Question> getQuestions()

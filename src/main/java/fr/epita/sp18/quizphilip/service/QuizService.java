@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -36,7 +35,6 @@ public class QuizService
                     quiz.getQuizId(),
                     quiz.getTitle(),
                     quiz.getDuration(),
-                    quiz.getShuffleType(),
                     quiz.getQuestions().size(),
                     quiz.getExams().size(),
                     quiz.getTeacherId()
@@ -49,8 +47,9 @@ public class QuizService
         return list;
     }
     
-    public Integer create()
+    public Long save(Quiz quiz)
     {
-        return (Integer) 0;
+        Quiz saved = repo.save(quiz);
+        return saved.getQuizId();
     }
 }
