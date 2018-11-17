@@ -6,6 +6,7 @@ import fr.epita.sp18.quizphilip.common.QuestionType;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -26,9 +27,9 @@ public class Question
     @JoinColumn(name = "quizId", nullable = false)
     private Quiz quiz;
     
-    @OneToMany(mappedBy = "question")
-    @JsonManagedReference
-    private List<QuestionChoice> choices;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "questionId")
+    private Set<QuestionChoice> choices;
     
     public Question()
     {
@@ -114,12 +115,12 @@ public class Question
         this.quiz = quiz;
     }
     
-    public List<QuestionChoice> getChoices()
+    public Set<QuestionChoice> getChoices()
     {
         return choices;
     }
     
-    public void setChoices(List<QuestionChoice> choices)
+    public void setChoices(Set<QuestionChoice> choices)
     {
         this.choices = choices;
     }

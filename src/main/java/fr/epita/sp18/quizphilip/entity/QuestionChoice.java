@@ -1,6 +1,6 @@
 package fr.epita.sp18.quizphilip.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.*;
 import fr.epita.sp18.quizphilip.common.ChoiceNumber;
 import javax.persistence.*;
 
@@ -14,11 +14,12 @@ public class QuestionChoice {
     private String description;
     private Float score;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "questionId")
-    @JsonBackReference
-    private Question question;
-
+    @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
+    @JsonIdentityReference(alwaysAsId=true)
+    @JsonProperty("questionId")
+    
     public Long getQuestionChoiceId()
     {
         return questionChoiceId;
@@ -67,15 +68,5 @@ public class QuestionChoice {
     public void setScore(float score)
     {
         this.score = score;
-    }
-    
-    public Question getQuestion()
-    {
-        return question;
-    }
-    
-    public void setQuestion(Question question)
-    {
-        this.question = question;
     }
 }
