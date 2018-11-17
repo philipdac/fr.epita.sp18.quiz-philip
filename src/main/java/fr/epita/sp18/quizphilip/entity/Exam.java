@@ -1,12 +1,13 @@
 package fr.epita.sp18.quizphilip.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fr.epita.sp18.quizphilip.common.ExamStatus;
 import fr.epita.sp18.quizphilip.common.ShuffleType;
 
 import javax.persistence.*;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Exam
 {
     @Id
@@ -18,9 +19,8 @@ public class Exam
     private ExamStatus examStatus;
     private ShuffleType shuffleType;
     
-    @ManyToOne
-    @JoinColumn(name = "quizId")
-    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "quizId", nullable = false)
     private Quiz quiz;
     
     public Long getExamId()

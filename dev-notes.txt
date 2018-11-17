@@ -23,18 +23,18 @@ TEACHER ROLE:
 	/api/quizzes/{id}
 		CRUD a specific quiz
 	
-	/api/quizzes/{id}/questions
+	/api/questions?quizId={id}
 		GET list of all questions of a specific quiz {id}
 		POST create a new question of a specific quiz {id}
 	
-	/api/quizzes/{id}/questions/{questId}	
-		CRUD a specific question
+	/api/questions/{questId}
+		Read/Update/Delete a specific question
 	
-	/api/quizzes/{id}/exams
-		GET list of exams that used with this quiz
-
 	/api/exams
 		GET list of exams that run by the logged in teacher
+
+	/api/exams?quizId={id}
+		GET list of exams that used with a specific quiz {id}
 
 	/api/exams/{id}
 		GET list of students that taken this exam
@@ -64,3 +64,7 @@ STUDENT ROLE:
 
 	/api/exams/{quiz-student-id}/result
 		GET quiz result
+
+
+READING:
+https://www.callicoder.com/hibernate-spring-boot-jpa-one-to-many-mapping-example/

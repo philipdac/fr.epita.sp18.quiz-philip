@@ -7,9 +7,9 @@ INSERT INTO QUIZ(QUIZ_ID, DURATION, TEACHER_ID, TITLE)
   VALUES (1, 20, 1, 'Java Language Basics Quiz');
 
 INSERT INTO QUESTION
-  VALUES (1, '', 'public class Test{}', 4, 1.0, 0, 'What will happen when you compile and run the following code?', 1, 1);
+  VALUES (1, '', 'public class Test{}', 1.0, 0, 'What will happen when you compile and run the following code?', 1, 1);
 INSERT INTO QUESTION
-  VALUES (2, '', 'public class Test{}', 4, 1.0, 0, 'What will happen when you compile and run the following code?', 1, 1);
+  VALUES (2, '', 'public class Test{}', 1.0, 0, 'What will happen when you compile and run the following code?', 1, 1);
 
 INSERT INTO QUESTION_CHOICE
   VALUES (1, 1, 0, 'Parent Hello', 0, 1);

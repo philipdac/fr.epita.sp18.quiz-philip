@@ -4,6 +4,7 @@ import fr.epita.sp18.quizphilip.entity.Quiz;
 import fr.epita.sp18.quizphilip.service.QuizService;
 import model.QuizSnapshot;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class QuizController
         return service.list(teacherId);
     }
     
-    @PostMapping()
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public Long create(@RequestBody Quiz quiz)
     {
         quiz.setQuizId(null);

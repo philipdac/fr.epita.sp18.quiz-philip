@@ -35,8 +35,8 @@ public class QuizService
                     quiz.getQuizId(),
                     quiz.getTitle(),
                     quiz.getDuration(),
-                    quiz.getQuestions().size(),
-                    quiz.getExams().size(),
+                    0,
+                    0,
                     quiz.getTeacherId()
             );
             item.setTeacherName("Teacher");

@@ -1,14 +1,14 @@
 package fr.epita.sp18.quizphilip.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import fr.epita.sp18.quizphilip.common.MultiChoiceScoringType;
+import com.fasterxml.jackson.annotation.*;
+import fr.epita.sp18.quizphilip.common.ScoringType;
 import fr.epita.sp18.quizphilip.common.QuestionType;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Question
 {
     @Id
@@ -19,13 +19,11 @@ public class Question
     private String content;
     private QuestionType typeId;
     private Float score;
-    private MultiChoiceScoringType scoringType;
-    private Integer maxNumberOfChoice;
+    private ScoringType scoringType;
     private String answer;
     
-    @ManyToOne
-    @JoinColumn(name = "quizId")
-    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "quizId", nullable = false)
     private Quiz quiz;
     
     @OneToMany(mappedBy = "question")
@@ -86,24 +84,14 @@ public class Question
         this.score = score;
     }
 
-    public MultiChoiceScoringType getScoringType()
+    public ScoringType getScoringType()
     {
         return scoringType;
     }
     
-    public void setScoringType(MultiChoiceScoringType scoringType)
+    public void setScoringType(ScoringType scoringType)
     {
         this.scoringType = scoringType;
-    }
-    
-    public Integer getMaxNumberOfChoice()
-    {
-        return maxNumberOfChoice;
-    }
-    
-    public void setMaxNumberOfChoice(Integer maxNumberOfChoice)
-    {
-        this.maxNumberOfChoice = maxNumberOfChoice;
     }
     
     public String getAnswer()
