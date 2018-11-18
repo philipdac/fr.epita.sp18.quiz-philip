@@ -2,23 +2,22 @@ package fr.epita.sp18.quizphilip.entity;
 
 import com.fasterxml.jackson.annotation.*;
 import fr.epita.sp18.quizphilip.common.ChoiceNumber;
+
 import javax.persistence.*;
 
 @Entity
-public class QuestionChoice {
+public class QuestionChoice
+{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionChoiceId;
     private ChoiceNumber choiceNumber;
     private boolean correctChoice;
     private String description;
     private Float score;
-    
-    @ManyToOne(cascade = CascadeType.PERSIST)
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "questionId")
-    @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-    @JsonIdentityReference(alwaysAsId=true)
-    @JsonProperty("questionId")
     
     public Long getQuestionChoiceId()
     {
@@ -49,7 +48,7 @@ public class QuestionChoice {
     {
         this.correctChoice = correctChoice;
     }
-
+    
     public String getDescription()
     {
         return description;

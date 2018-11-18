@@ -5,6 +5,7 @@ import fr.epita.sp18.quizphilip.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -32,14 +33,14 @@ public class QuestionController
     }
     
     @PostMapping()
-    public Long create(@RequestBody Question question)
+    public Long create(@Valid @RequestBody Question question)
     {
         question.setQuestionId(null);
         return service.save(question);
     }
     
     @PutMapping("/{questionId}")
-    public Long update(@PathVariable Long questionId, @RequestBody Question question)
+    public Long update(@PathVariable Long questionId, @Valid @RequestBody Question question)
     {
         return service.save(question);
     }

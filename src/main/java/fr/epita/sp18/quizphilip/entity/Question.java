@@ -1,19 +1,19 @@
 package fr.epita.sp18.quizphilip.entity;
 
-import com.fasterxml.jackson.annotation.*;
-import fr.epita.sp18.quizphilip.common.ScoringType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fr.epita.sp18.quizphilip.common.QuestionType;
+import fr.epita.sp18.quizphilip.common.ScoringType;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Question
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionId;
     
     private String title;
@@ -29,11 +29,7 @@ public class Question
     
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "questionId")
-    private Set<QuestionChoice> choices;
-    
-    public Question()
-    {
-    }
+    private List<QuestionChoice> choices = new ArrayList<>();
     
     public Long getQuestionId()
     {
@@ -84,7 +80,7 @@ public class Question
     {
         this.score = score;
     }
-
+    
     public ScoringType getScoringType()
     {
         return scoringType;
@@ -115,12 +111,12 @@ public class Question
         this.quiz = quiz;
     }
     
-    public Set<QuestionChoice> getChoices()
+    public List<QuestionChoice> getChoices()
     {
         return choices;
     }
     
-    public void setChoices(Set<QuestionChoice> choices)
+    public void setChoices(List<QuestionChoice> choices)
     {
         this.choices = choices;
     }
