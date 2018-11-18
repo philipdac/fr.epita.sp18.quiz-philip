@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Question
+public class Question extends AuditModel
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

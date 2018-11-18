@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Quiz
+public class Quiz extends AuditModel
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

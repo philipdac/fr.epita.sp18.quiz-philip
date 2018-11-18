@@ -6,7 +6,7 @@ import fr.epita.sp18.quizphilip.common.ChoiceNumber;
 import javax.persistence.*;
 
 @Entity
-public class QuestionChoice
+public class QuestionChoice extends AuditModel
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,7 +2,7 @@ package fr.epita.sp18.quizphilip.entity;
 
 import fr.epita.sp18.quizphilip.common.ChoiceNumber;
 
-public class StudentQuizQuestionChoice
+public class StudentQuizQuestionChoice extends AuditModel
 {
     private Long studentQuizId;
     private Long questionChoiceId;

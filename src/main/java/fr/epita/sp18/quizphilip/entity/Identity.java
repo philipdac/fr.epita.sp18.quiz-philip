@@ -3,7 +3,7 @@ package fr.epita.sp18.quizphilip.entity;
 import javax.persistence.*;
 
 @Entity
-public class Identity extends EntityAbstract
+public class Identity extends AuditModel
 {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

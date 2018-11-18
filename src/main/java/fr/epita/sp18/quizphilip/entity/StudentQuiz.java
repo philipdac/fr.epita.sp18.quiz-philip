@@ -1,10 +1,9 @@
 package fr.epita.sp18.quizphilip.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.util.Date;
 
-public class StudentQuiz extends EntityAbstract {
+public class StudentQuiz extends AuditModel
+{
     private String studentName;
     private String studentEmail;
     private Long quizId;
