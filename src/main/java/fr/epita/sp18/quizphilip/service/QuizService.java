@@ -1,6 +1,7 @@
 package fr.epita.sp18.quizphilip.service;
 
 import fr.epita.sp18.quizphilip.entity.Quiz;
+import fr.epita.sp18.quizphilip.repository.QuestionRepository;
 import fr.epita.sp18.quizphilip.repository.QuizRepository;
 import model.QuizSnapshot;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,31 +13,36 @@ import java.util.List;
 @Service
 public class QuizService
 {
-    private final QuizRepository repo;
+    private final QuizRepository quizRepo;
+    private final QuestionRepository questionRepo;
     
     @Autowired
-    public QuizService(QuizRepository repo)
+    public QuizService(QuizRepository quizRepo, QuestionRepository questionRepo)
     {
-        this.repo = repo;
+        this.quizRepo = quizRepo;
+        this.questionRepo = questionRepo;
     }
     
     public Quiz get(Long quizId)
     {
-        return repo.getOne(quizId);
+        return quizRepo.getOne(quizId);
     }
     
     public List<QuizSnapshot> list(long teacherId)
     {
         List<QuizSnapshot> list = new ArrayList<>();
-        List<Quiz> quizzes = repo.findAllBy(teacherId);
+        List<Quiz> quizzes = quizRepo.findAllBy(teacherId);
         
         for (Quiz quiz : quizzes) {
+            Long questionCount = questionRepo.countByQuiz(quiz.getQuizId());
+            Long examCount = 0L;
+            
             QuizSnapshot item = new QuizSnapshot(
                     quiz.getQuizId(),
                     quiz.getTitle(),
                     quiz.getDuration(),
-                    0,
-                    0,
+                    questionCount,
+                    examCount,
                     quiz.getTeacherId()
             );
             item.setTeacherName("Teacher");
@@ -49,7 +55,7 @@ public class QuizService
     
     public Long save(Quiz quiz)
     {
-        Quiz saved = repo.save(quiz);
+        Quiz saved = quizRepo.save(quiz);
         return saved.getQuizId();
     }
 }

@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class Quiz
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long quizId;
     
     private Long teacherId;

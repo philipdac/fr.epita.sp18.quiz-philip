@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class Identity extends EntityAbstract
 {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     protected Long id;
     private String name;
     private String email;

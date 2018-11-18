@@ -11,4 +11,7 @@ import java.util.List;
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query(value= "SELECT * FROM QUESTION q WHERE q.QUIZ_ID = ?1", nativeQuery = true)
     List<Question> findAllBy(Long quizId);
+    
+    @Query(value= "select count(q.QUIZ_ID) from QUESTION q where q.QUIZ_ID = ?1", nativeQuery = true)
+    Long countByQuiz(Long quizId);
 }

@@ -7,13 +7,13 @@ public class QuizSnapshot
     private Long quizId;
     private String title;
     private Integer duration;
-    private Integer questionCount;
-    private Integer examCount;
+    private Long questionCount;
+    private Long examCount;
     private Long teacherId;
     private String teacherName;
     
     public QuizSnapshot(Long quizId, String title, Integer duration,
-            Integer questionCount, Integer examCount, Long teacherId)
+            Long questionCount, Long examCount, Long teacherId)
     {
         this.quizId = quizId;
         this.title = title;
@@ -53,22 +53,22 @@ public class QuizSnapshot
         this.duration = duration;
     }
     
-    public Integer getQuestionCount()
+    public Long getQuestionCount()
     {
         return questionCount;
     }
     
-    public void setQuestionCount(Integer questionCount)
+    public void setQuestionCount(Long questionCount)
     {
         this.questionCount = questionCount;
     }
     
-    public Integer getExamCount()
+    public Long getExamCount()
     {
         return examCount;
     }
     
-    public void setExamCount(Integer examCount)
+    public void setExamCount(Long examCount)
     {
         this.examCount = examCount;
     }
