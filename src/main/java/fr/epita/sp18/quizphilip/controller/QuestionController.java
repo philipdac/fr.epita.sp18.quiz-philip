@@ -44,4 +44,10 @@ public class QuestionController
     {
         return service.save(question);
     }
+
+    @DeleteMapping("/{questionId}")
+    public void delete(@PathVariable Long questionId)
+    {
+        service.delete(questionId);
+    }
 }

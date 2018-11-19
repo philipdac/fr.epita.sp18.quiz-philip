@@ -33,4 +33,10 @@ public class QuestionService
         Question saved = questionRepo.save(question);
         return saved.getQuestionId();
     }
+    
+    public void delete(Long questionId)
+    {
+        if (questionRepo.existsById(questionId))
+            questionRepo.deleteById(questionId);
+    }
 }

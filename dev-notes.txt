@@ -20,14 +20,14 @@ TEACHER ROLE:
 		GET list of all quizzes
 		POST create a new quiz
 					
-	/api/quizzes/{id}
+	/api/quizzes/{quizId}
 		CRUD a specific quiz
 	
-	/api/questions?quizId={id}
-		GET list of all questions of a specific quiz {id}
-		POST create a new question of a specific quiz {id}
+	/api/quizzes/{quizId}/questions
+		GET list of all questions of a specific quiz {quizId}
+		POST create a new question of a specific quiz {quizId}
 	
-	/api/questions/{questId}
+	/api/quizzes/{quizId}/questions/{questionId}
 		Read/Update/Delete a specific question
 	
 	/api/exams
@@ -68,3 +68,4 @@ STUDENT ROLE:
 
 READING:
 https://www.callicoder.com/hibernate-spring-boot-jpa-one-to-many-mapping-example/
+https://dzone.com/articles/leverage-http-status-codes-to-build-a-rest-service
