@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/exams")
+@RequestMapping(value = "/exams")
 public class ExamController
 {
     private final ExamService service;
@@ -27,9 +27,9 @@ public class ExamController
     }
     
     @GetMapping()
-    public List<Exam> list(@RequestParam("examId") long examId)
+    public List<Exam> list(@RequestParam("quizId") long quizId)
     {
-        return service.list(examId);
+        return service.list(quizId);
     }
     
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

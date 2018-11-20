@@ -12,28 +12,26 @@ As a teacher, I want to make a quiz with following features:
 A quiz can be used by many exams
 
 
-exams
-
 TEACHER ROLE:
 
+QUIZZES
 	/api/quizzes
 		GET list of all quizzes
 		POST create a new quiz
 					
 	/api/quizzes/{quizId}
-		CRUD a specific quiz
-	
-	/api/quizzes/{quizId}/questions
+		Read/Update/Delete a specific quiz {quizId}
+
+QUESTIONS
+	/api/questions?quizzes={quizId}
 		GET list of all questions of a specific quiz {quizId}
 		POST create a new question of a specific quiz {quizId}
 	
-	/api/quizzes/{quizId}/questions/{questionId}
+	/api/questions/{questionId}
 		Read/Update/Delete a specific question
-	
-	/api/exams
-		GET list of exams that run by the logged in teacher
 
-	/api/exams?quizId={id}
+EXAMS
+	/api/exams?quizzes={quizId}
 		GET list of exams that used with a specific quiz {id}
 
 	/api/exams/{id}

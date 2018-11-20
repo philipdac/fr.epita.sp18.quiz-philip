@@ -18,9 +18,9 @@ public class ExamService
         this.examRepo = examRepo;
     }
     
-    public Exam get(Long quizId)
+    public Exam get(Long examId)
     {
-        return examRepo.getOne(quizId);
+        return examRepo.getOne(examId);
     }
     
     public List<Exam> list(long quizId)

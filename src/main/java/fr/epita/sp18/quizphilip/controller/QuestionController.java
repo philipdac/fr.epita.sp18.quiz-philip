@@ -9,7 +9,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/questions")
+@RequestMapping(value = "/questions")
 public class QuestionController
 {
     private final QuestionService service;
@@ -26,7 +26,7 @@ public class QuestionController
         return service.get(questionId);
     }
     
-    @GetMapping()
+    @GetMapping("")
     public List<Question> list(@RequestParam("quizId") long quizId)
     {
         return service.list(quizId);

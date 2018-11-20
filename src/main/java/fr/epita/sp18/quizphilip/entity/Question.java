@@ -28,7 +28,7 @@ public class Question extends AuditModel
     private Quiz quiz;
     
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "questionId", nullable=false)
+    @JoinColumn(name = "questionId")
     private List<QuestionChoice> choices = new ArrayList<>();
     
     public Long getQuestionId()
