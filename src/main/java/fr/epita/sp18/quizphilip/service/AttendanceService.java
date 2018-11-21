@@ -120,8 +120,8 @@ public class AttendanceService
         
         for (Question question: questions ) {
             AttendanceQuestion aQuest = new AttendanceQuestion();
-            aQuest.setQuestionId(question.getQuestionId());
-            aQuest.setScore(question.getScore());
+            aQuest.setQuestion(question);
+            aQuest.setScore(0f);
             aQuest.setPosition(shuffled.get(i++));
             
             if (exam.getShuffleType() == ShuffleType.SHUFFLE_QUIZ_AND_CHOICE) {

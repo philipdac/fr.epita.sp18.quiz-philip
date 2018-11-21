@@ -14,10 +14,14 @@ public class AttendanceQuestion extends AuditModel
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long attendanceQuestionId;
     private Long attendanceId;
-    private Long questionId;
-    private Float score;
+    
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "questionId", nullable = false)
+    private Question question;
+    
     private Integer position;
     private String shuffledChoices;
+    private Float score;
     
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "attendanceQuestionId")
@@ -46,14 +50,14 @@ public class AttendanceQuestion extends AuditModel
         this.attendanceId = attendanceId;
     }
     
-    public Long getQuestionId()
+    public Question getQuestion()
     {
-        return questionId;
+        return question;
     }
     
-    public void setQuestionId(Long questionId)
+    public void setQuestion(Question question)
     {
-        this.questionId = questionId;
+        this.question = question;
     }
     
     public Float getScore()
