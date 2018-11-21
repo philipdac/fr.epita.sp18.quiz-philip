@@ -25,7 +25,7 @@ public class Attendance extends AuditModel
     private ShuffleType shuffleType;
     
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "attendanceQuestionId")
+    @JoinColumn(name = "attendanceId")
     private List<AttendanceQuestion> questions = new ArrayList<>();
     
     public Attendance() {}

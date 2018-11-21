@@ -13,19 +13,18 @@ public class AttendanceQuestion extends AuditModel
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long attendanceQuestionId;
-    
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Attendance.class)
-    @JoinColumn(name = "attendanceId")
-    
     private Long attendanceId;
     private Long questionId;
     private Float score;
     private Integer position;
     private String shuffledChoices;
     
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = AttendanceAnswer.class)
-    @JoinColumn(name = "attendanceAnswerId")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "attendanceQuestionId")
     private List<AttendanceAnswer> answers = new ArrayList<>();
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "attendanceId")
     
     public Long getAttendanceQuestionId()
     {

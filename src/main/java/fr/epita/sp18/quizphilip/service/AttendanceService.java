@@ -1,32 +1,36 @@
 package fr.epita.sp18.quizphilip.service;
 
 import fr.epita.sp18.quizphilip.common.ExamStatus;
+import fr.epita.sp18.quizphilip.common.ShuffleType;
+import fr.epita.sp18.quizphilip.entity.AttendanceQuestion;
 import fr.epita.sp18.quizphilip.entity.Exam;
 import fr.epita.sp18.quizphilip.entity.Attendance;
+import fr.epita.sp18.quizphilip.entity.Question;
 import fr.epita.sp18.quizphilip.model.ApiResponse;
 import fr.epita.sp18.quizphilip.repository.AttendanceRepository;
 import fr.epita.sp18.quizphilip.model.AnswerRequest;
 import fr.epita.sp18.quizphilip.model.AttendRequest;
 import fr.epita.sp18.quizphilip.repository.ExamRepository;
+import fr.epita.sp18.quizphilip.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class AttendanceService
 {
     private final ExamRepository examRepo;
     private final AttendanceRepository attendRepo;
+    private final QuestionRepository questionRepo;
     
     @Autowired
-    public AttendanceService(ExamRepository examRepo, AttendanceRepository attendRepo)
+    public AttendanceService(ExamRepository examRepo, AttendanceRepository attendRepo, QuestionRepository questionRepo)
     {
         this.examRepo = examRepo;
         this.attendRepo = attendRepo;
+        this.questionRepo = questionRepo;
     }
 
     private Specification<Exam> hasRoomName(String name) {
@@ -63,10 +67,9 @@ public class AttendanceService
                 return response;
             } else {
                 // Join him to the exam
-                attendance = attendRepo.save(new Attendance(exam, request.getEmail()));
-                
-                // Shuffle the question list if needed
-                ShuffleTheQuestions();
+                Attendance newAtd =  new Attendance(exam, request.getEmail());
+                newAtd.setQuestions(getQuestions(exam));
+                attendance = attendRepo.save(newAtd);
             }
         } else {
             // Is the student runs out of his time?
@@ -83,8 +86,43 @@ public class AttendanceService
         return response;
     }
     
-    private void ShuffleTheQuestions() {
+    private List<Integer> getShuffledArray(int length) {
+        List<Integer> array = new ArrayList<>();
+        
+        for (int i=0; i<length; i++) {
+            array.add(i);
+        }
     
+        Collections.shuffle(array);
+        
+        return array;
+    }
+    
+    private List<AttendanceQuestion> getQuestions(Exam exam) {
+        List<Question> questions = questionRepo.findAllBy(exam.getQuiz().getQuizId());
+        List<Integer> shuffled = getShuffledArray(questions.size());
+        
+        List<AttendanceQuestion> list = new ArrayList<>();
+    
+        int i = 0;
+        
+        for (Question question: questions ) {
+            AttendanceQuestion aQuest = new AttendanceQuestion();
+            aQuest.setQuestionId(question.getQuestionId());
+            aQuest.setScore(question.getScore());
+            aQuest.setPosition(shuffled.get(i++));
+            
+            if (exam.getShuffleType() == ShuffleType.SHUFFLE_QUIZ_AND_CHOICE) {
+                List<Integer> shuffledChoices = getShuffledArray(question.getChoices().size());
+                aQuest.setShuffledChoices(shuffledChoices.toString());
+            } else {
+                aQuest.setShuffledChoices("");
+            }
+            
+            list.add(aQuest);
+        }
+        
+        return list;
     }
     
     private ApiResponse<Attendance> validateAttendRequest(AttendRequest request)
