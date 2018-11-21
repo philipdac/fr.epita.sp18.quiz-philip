@@ -1,6 +1,4 @@
-package model;
-
-import fr.epita.sp18.quizphilip.common.ShuffleType;
+package fr.epita.sp18.quizphilip.model;
 
 public class QuizSnapshot
 {

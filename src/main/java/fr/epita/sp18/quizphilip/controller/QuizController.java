@@ -2,7 +2,7 @@ package fr.epita.sp18.quizphilip.controller;
 
 import fr.epita.sp18.quizphilip.entity.Quiz;
 import fr.epita.sp18.quizphilip.service.QuizService;
-import model.QuizSnapshot;
+import fr.epita.sp18.quizphilip.model.QuizSnapshot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

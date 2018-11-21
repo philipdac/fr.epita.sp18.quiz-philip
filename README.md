@@ -20,5 +20,4 @@ As a __TEACHER__, I would like to give examination to my students in a quiz form
 
 As a __STUDENT__, I would like to:
 - Take the examination with a "room code" that I get from my teacher. My email address and the room code are all I need to take the exam.
-- In case that I close my web browser accidentally, I can get back to the place where I have just left.
-
+- In case that I refresh the page or close my web browser accidentally, I can get back to the place where I have just left.
