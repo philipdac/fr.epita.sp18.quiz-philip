@@ -80,10 +80,22 @@ public class AttendanceService
             }
         }
     
-        // Ok to go
+        // Sort the question base on the shuffled result
+        List<AttendanceQuestion> questions = attendance.getQuestions();
+        questions.sort(new SortTheQuestions());
+        attendance.setQuestions(questions);
+        
         response.setData(attendance);
     
         return response;
+    }
+    
+    private class SortTheQuestions implements Comparator<AttendanceQuestion>
+    {
+        public int compare(AttendanceQuestion a, AttendanceQuestion b)
+        {
+            return a.getPosition() - b.getPosition();
+        }
     }
     
     private List<Integer> getShuffledArray(int length) {
