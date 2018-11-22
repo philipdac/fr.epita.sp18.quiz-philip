@@ -9,7 +9,7 @@ As a __TEACHER__, I would like to give examination to my students in a quiz form
     2. Multiple choices or
     3. Open for student to write his/her own answer
 - Questions can have difference score and evaluation method (automatic, manual), depending on their complexity.
-- I can put an suggestion or answer to each question to support evaluation process or student review after their examination.
+- I can put an explanation or answer to each question to support evaluation process or student review after their examination.
 - I can set time constraint to the quiz.
 - I can define many examinations base on one quiz.
 - I can control the status (attend-able, work submission only, completed) of the examination.

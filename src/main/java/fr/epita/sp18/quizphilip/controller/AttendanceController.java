@@ -2,6 +2,7 @@ package fr.epita.sp18.quizphilip.controller;
 
 import fr.epita.sp18.quizphilip.entity.Attendance;
 import fr.epita.sp18.quizphilip.model.ApiResponse;
+import fr.epita.sp18.quizphilip.model.AttendResponse;
 import fr.epita.sp18.quizphilip.service.AttendanceService;
 import fr.epita.sp18.quizphilip.model.AnswerRequest;
 import fr.epita.sp18.quizphilip.model.AttendRequest;
@@ -23,7 +24,7 @@ public class AttendanceController
     }
     
     @PostMapping()
-    public ApiResponse<Attendance> create(@RequestBody AttendRequest request)
+    public ApiResponse<AttendResponse> create(@RequestBody AttendRequest request)
     {
         return service.attend(request);
     }

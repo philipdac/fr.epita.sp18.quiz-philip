@@ -6,10 +6,8 @@ import fr.epita.sp18.quizphilip.entity.AttendanceQuestion;
 import fr.epita.sp18.quizphilip.entity.Exam;
 import fr.epita.sp18.quizphilip.entity.Attendance;
 import fr.epita.sp18.quizphilip.entity.Question;
-import fr.epita.sp18.quizphilip.model.ApiResponse;
+import fr.epita.sp18.quizphilip.model.*;
 import fr.epita.sp18.quizphilip.repository.AttendanceRepository;
-import fr.epita.sp18.quizphilip.model.AnswerRequest;
-import fr.epita.sp18.quizphilip.model.AttendRequest;
 import fr.epita.sp18.quizphilip.repository.ExamRepository;
 import fr.epita.sp18.quizphilip.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +30,14 @@ public class AttendanceService
         this.attendRepo = attendRepo;
         this.questionRepo = questionRepo;
     }
-
-    private Specification<Exam> hasRoomName(String name) {
+    
+    private Specification<Exam> hasRoomName(String name)
+    {
         return (exam, cq, cb) -> cb.equal(exam.get("examRoom"), name);
     }
     
-    private Specification<Attendance> hasStudentEmail(String email) {
+    private Specification<Attendance> hasStudentEmail(String email)
+    {
         return (examAttendance, cq, cb) -> cb.equal(examAttendance.get("studentEmail"), email);
     }
     
@@ -46,14 +46,14 @@ public class AttendanceService
         return attendRepo.findAllBy(examId);
     }
     
-    public ApiResponse<Attendance> attend(AttendRequest request)
+    public ApiResponse<AttendResponse> attend(AttendRequest request)
     {
-        ApiResponse<Attendance> response;
-    
+        ApiResponse<AttendResponse> response;
+        
         // validation is not null when examRoom invalid or the exam was completed/deleted already
         response = validateAttendRequest(request);
         if (response != null) return response;
-    
+        
         Exam exam = examRepo.findOne(hasRoomName(request.getExamRoom())).orElse(new Exam());
         Attendance attendance = attendRepo.findOne(hasStudentEmail(request.getEmail())).orElse(null);
         
@@ -67,7 +67,7 @@ public class AttendanceService
                 return response;
             } else {
                 // Join him to the exam
-                Attendance newAtd =  new Attendance(exam, request.getEmail());
+                Attendance newAtd = new Attendance(exam, request.getEmail());
                 newAtd.setQuestions(getQuestions(exam));
                 attendance = attendRepo.save(newAtd);
             }
@@ -79,14 +79,34 @@ public class AttendanceService
                 return response;
             }
         }
+        
+        response.setData(getAttendResponse(attendance));
+        
+        return response;
+    }
     
+    private AttendResponse getAttendResponse(Attendance attendance)
+    {
+        AttendResponse response = new AttendResponse(
+                attendance.getAttendanceId(), attendance.getStudentEmail(), attendance.getStartTime(), attendance.getEndTime()
+        );
+        
         // Sort the question base on the shuffled result
         List<AttendanceQuestion> questions = attendance.getQuestions();
         questions.sort(new SortTheQuestions());
-        attendance.setQuestions(questions);
-        
-        response.setData(attendance);
     
+        List<ExamQuestion> examQuestions = new ArrayList<>();
+        for (AttendanceQuestion aQuest : questions) {
+            Question question = aQuest.getQuestion();
+            ExamQuestion eQuest = new ExamQuestion(
+                    question.getQuestionId(), question.getTitle(), question.getContent(), question.getTypeId(), question.getScore()
+            );
+            
+            examQuestions.add(eQuest);
+        }
+        
+        response.setQuestions(examQuestions);
+        
         return response;
     }
     
@@ -98,27 +118,29 @@ public class AttendanceService
         }
     }
     
-    private List<Integer> getShuffledArray(int length) {
+    private List<Integer> getShuffledArray(int length)
+    {
         List<Integer> array = new ArrayList<>();
         
-        for (int i=0; i<length; i++) {
+        for (int i = 0; i < length; i++) {
             array.add(i);
         }
-    
+        
         Collections.shuffle(array);
         
         return array;
     }
     
-    private List<AttendanceQuestion> getQuestions(Exam exam) {
+    private List<AttendanceQuestion> getQuestions(Exam exam)
+    {
         List<Question> questions = questionRepo.findAllBy(exam.getQuiz().getQuizId());
         List<Integer> shuffled = getShuffledArray(questions.size());
         
         List<AttendanceQuestion> list = new ArrayList<>();
-    
+        
         int i = 0;
         
-        for (Question question: questions ) {
+        for (Question question : questions) {
             AttendanceQuestion aQuest = new AttendanceQuestion();
             aQuest.setQuestion(question);
             aQuest.setScore(0f);
@@ -137,9 +159,9 @@ public class AttendanceService
         return list;
     }
     
-    private ApiResponse<Attendance> validateAttendRequest(AttendRequest request)
+    private ApiResponse<AttendResponse> validateAttendRequest(AttendRequest request)
     {
-        ApiResponse<Attendance> response = new ApiResponse<>();
+        ApiResponse<AttendResponse> response = new ApiResponse<>();
         
         // Is the examRoom valid?
         String examRoom = request.getExamRoom();
@@ -159,7 +181,7 @@ public class AttendanceService
         
         // Can the student attend the exam?
         ExamStatus examStatus = exam.getExamStatus();
-        if ( (examStatus == ExamStatus.COMPLETED) || (examStatus == ExamStatus.DELETED)) {
+        if ((examStatus == ExamStatus.COMPLETED) || (examStatus == ExamStatus.DELETED)) {
             response.setHasError(true);
             response.setErrorMessage("The exam was already completed or deleted.");
             return response;

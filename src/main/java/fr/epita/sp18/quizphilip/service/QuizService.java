@@ -1,6 +1,7 @@
 package fr.epita.sp18.quizphilip.service;
 
 import fr.epita.sp18.quizphilip.entity.Quiz;
+import fr.epita.sp18.quizphilip.repository.ExamRepository;
 import fr.epita.sp18.quizphilip.repository.QuestionRepository;
 import fr.epita.sp18.quizphilip.repository.QuizRepository;
 import fr.epita.sp18.quizphilip.model.QuizSnapshot;
@@ -14,12 +15,14 @@ import java.util.List;
 public class QuizService
 {
     private final QuizRepository quizRepo;
+    private final ExamRepository examRepo;
     private final QuestionRepository questionRepo;
     
     @Autowired
-    public QuizService(QuizRepository quizRepo, QuestionRepository questionRepo)
+    public QuizService(QuizRepository quizRepo, ExamRepository examRepo, QuestionRepository questionRepo)
     {
         this.quizRepo = quizRepo;
+        this.examRepo = examRepo;
         this.questionRepo = questionRepo;
     }
     
@@ -35,7 +38,7 @@ public class QuizService
         
         for (Quiz quiz : quizzes) {
             Long questionCount = questionRepo.countByQuiz(quiz.getQuizId());
-            Long examCount = 0L;
+            Long examCount = examRepo.countByQuiz(quiz.getQuizId());
             
             QuizSnapshot item = new QuizSnapshot(
                     quiz.getQuizId(),

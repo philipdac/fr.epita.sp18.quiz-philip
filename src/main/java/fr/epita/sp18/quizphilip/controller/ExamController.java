@@ -44,4 +44,11 @@ public class ExamController
     {
         return service.save(exam);
     }
+    
+    @DeleteMapping("/{examId}")
+    public void delete(@PathVariable Long examId)
+    {
+        service.delete(examId);
+    }
+    
 }

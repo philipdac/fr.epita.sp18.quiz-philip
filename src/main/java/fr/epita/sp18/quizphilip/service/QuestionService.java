@@ -23,9 +23,10 @@ public class QuestionService
         return questionRepo.getOne(questionId);
     }
     
-    public List<Question> list(long questionId)
+    public List<Question> list(long quizId)
     {
-        return questionRepo.findAllBy(questionId);
+        if (quizId <= 0) return null;
+        return questionRepo.findAllBy(quizId);
     }
     
     public Long save(Question question)

@@ -25,6 +25,8 @@ public class ExamService
     
     public List<Exam> list(long quizId)
     {
+        if (quizId <= 0) return null;
+        
         return examRepo.findAllBy(quizId);
     }
     
@@ -33,4 +35,11 @@ public class ExamService
         Exam saved = examRepo.save(exam);
         return saved.getExamId();
     }
+    
+    public void delete(Long examId)
+    {
+        if (examRepo.existsById(examId))
+            examRepo.deleteById(examId);
+    }
+    
 }
