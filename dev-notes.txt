@@ -43,7 +43,7 @@ EXAMS
 		GET list of questions & answer of a pair quiz-student
 
 	/api/evaluation/{quiz-student-id}/questions/{questId}
-		PUT update the score of a specific question {questId}
+		PUT update the scoreEarned of a specific question {questId}
 
 STUDENT ROLE:
 

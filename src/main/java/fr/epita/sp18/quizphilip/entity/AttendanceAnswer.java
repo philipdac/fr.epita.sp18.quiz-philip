@@ -13,10 +13,11 @@ public class AttendanceAnswer extends AuditModel
     
     private Long attendanceId;
     private Long questionId;
-    private ChoiceNumber choiceNumber;
+    private Long questionChoiceId;
     private String openAnswer;
+    
     private boolean correctAnswer;
-    private Float score;
+    private Float scoreEarned;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "attendanceQuestionId")
@@ -51,14 +52,14 @@ public class AttendanceAnswer extends AuditModel
         this.questionId = questionId;
     }
     
-    public ChoiceNumber getChoiceNumber()
+    public Long getQuestionChoiceId()
     {
-        return choiceNumber;
+        return questionChoiceId;
     }
     
-    public void setChoiceNumber(ChoiceNumber choiceNumber)
+    public void setQuestionChoiceId(Long questionChoiceId)
     {
-        this.choiceNumber = choiceNumber;
+        this.questionChoiceId = questionChoiceId;
     }
     
     public String getOpenAnswer()
@@ -81,13 +82,13 @@ public class AttendanceAnswer extends AuditModel
         this.correctAnswer = correctAnswer;
     }
     
-    public Float getScore()
+    public Float getScoreEarned()
     {
-        return score;
+        return scoreEarned;
     }
     
-    public void setScore(Float score)
+    public void setScoreEarned(Float scoreEarned)
     {
-        this.score = score;
+        this.scoreEarned = scoreEarned;
     }
 }

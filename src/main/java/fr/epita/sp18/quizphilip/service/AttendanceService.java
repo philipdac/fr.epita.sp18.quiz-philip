@@ -2,10 +2,7 @@ package fr.epita.sp18.quizphilip.service;
 
 import fr.epita.sp18.quizphilip.common.ExamStatus;
 import fr.epita.sp18.quizphilip.common.ShuffleType;
-import fr.epita.sp18.quizphilip.entity.AttendanceQuestion;
-import fr.epita.sp18.quizphilip.entity.Exam;
-import fr.epita.sp18.quizphilip.entity.Attendance;
-import fr.epita.sp18.quizphilip.entity.Question;
+import fr.epita.sp18.quizphilip.entity.*;
 import fr.epita.sp18.quizphilip.model.*;
 import fr.epita.sp18.quizphilip.repository.AttendanceRepository;
 import fr.epita.sp18.quizphilip.repository.ExamRepository;
@@ -75,7 +72,7 @@ public class AttendanceService
             // Is the student runs out of his time?
             if (attendance.getEndTime().getTime() < System.currentTimeMillis()) {
                 response.setHasError(true);
-                response.setErrorMessage("You have run out of time for this exam.");
+                response.setErrorMessage("Can not attend. You have run out of time for this exam.");
                 return response;
             }
         }
@@ -102,12 +99,38 @@ public class AttendanceService
                     question.getQuestionId(), question.getTitle(), question.getContent(), question.getTypeId(), question.getScore()
             );
             
+            // Load the question's choices
+            eQuest.setChoices(shuffleQuestionChoices(aQuest.getShuffledChoices(), question.getChoices()));
+            
+            // Load student's answer to this question
+            
+            // Add to the list
             examQuestions.add(eQuest);
         }
         
         response.setQuestions(examQuestions);
         
         return response;
+    }
+    
+    private List<ExamQuestionChoice> shuffleQuestionChoices(String shuffled, List<QuestionChoice> choices) {
+        
+        String[] array = shuffled.split(",");
+        List<ExamQuestionChoice> list = new ArrayList<>();
+        
+        for (int i = 0; i < choices.size(); i++) {
+            int j = i;
+            if (i < array.length && !array[i].isEmpty()) {
+                j = Integer.parseInt(array[i]);
+            }
+            
+            QuestionChoice choice = choices.get(j);
+            ExamQuestionChoice eChoice = new ExamQuestionChoice(choice.getQuestionChoiceId(), choice.getDescription());
+            
+            list.add(eChoice);
+        }
+        
+        return list;
     }
     
     private class SortTheQuestions implements Comparator<AttendanceQuestion>
@@ -143,12 +166,20 @@ public class AttendanceService
         for (Question question : questions) {
             AttendanceQuestion aQuest = new AttendanceQuestion();
             aQuest.setQuestion(question);
-            aQuest.setScore(0f);
+            aQuest.setScoreEarned(0f);
             aQuest.setPosition(shuffled.get(i++));
             
             if (exam.getShuffleType() == ShuffleType.SHUFFLE_QUIZ_AND_CHOICE) {
+                // Get the shuffled array
                 List<Integer> shuffledChoices = getShuffledArray(question.getChoices().size());
-                aQuest.setShuffledChoices(shuffledChoices.toString());
+                
+                // Convert the array to string
+                String order = shuffledChoices.toString();
+                
+                // Remove the '[' and ']' from the string
+                order = order.substring(1, order.length()-1);
+                
+                aQuest.setShuffledChoices(order);
             } else {
                 aQuest.setShuffledChoices("");
             }

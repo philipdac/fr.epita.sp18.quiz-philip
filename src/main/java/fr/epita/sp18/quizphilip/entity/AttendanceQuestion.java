@@ -19,9 +19,13 @@ public class AttendanceQuestion extends AuditModel
     @JoinColumn(name = "questionId", nullable = false)
     private Question question;
     
+    // Position of this question in student's list
     private Integer position;
+    
+    // Question's choices in shuffled order
     private String shuffledChoices;
-    private Float score;
+    
+    private Float scoreEarned;
     
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "attendanceQuestionId")
@@ -60,14 +64,14 @@ public class AttendanceQuestion extends AuditModel
         this.question = question;
     }
     
-    public Float getScore()
+    public Float getScoreEarned()
     {
-        return score;
+        return scoreEarned;
     }
     
-    public void setScore(Float score)
+    public void setScoreEarned(Float scoreEarned)
     {
-        this.score = score;
+        this.scoreEarned = scoreEarned;
     }
     
     public Integer getPosition()
