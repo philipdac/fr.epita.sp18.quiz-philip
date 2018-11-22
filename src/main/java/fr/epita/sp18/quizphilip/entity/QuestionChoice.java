@@ -13,7 +13,10 @@ public class QuestionChoice extends AuditModel
     private Long questionChoiceId;
     private ChoiceNumber choiceNumber;
     private boolean correctChoice;
+    
+    @Lob
     private String description;
+    
     private Float score;
 
     @ManyToOne(fetch = FetchType.LAZY)

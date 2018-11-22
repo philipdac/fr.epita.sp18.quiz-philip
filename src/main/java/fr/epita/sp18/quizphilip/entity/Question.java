@@ -16,11 +16,17 @@ public class Question extends AuditModel
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionId;
     
+    @Lob
     private String title;
+    
+    @Lob
     private String content;
+    
     private QuestionType typeId;
     private Float score;
     private ScoringType scoringType;
+    
+    @Lob
     private String answer;
     
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

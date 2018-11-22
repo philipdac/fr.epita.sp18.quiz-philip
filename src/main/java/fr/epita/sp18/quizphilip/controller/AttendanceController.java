@@ -34,10 +34,4 @@ public class AttendanceController
     {
         return service.answer(attendanceId, questionId, request);
     }
-    
-    @GetMapping("/exam/{examId}")
-    public List<Attendance> list(@PathVariable Long examId)
-    {
-        return service.list(examId);
-    }
 }

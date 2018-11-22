@@ -77,15 +77,17 @@ public class AttendanceService
             }
         }
         
-        response.setData(getAttendResponse(attendance));
+        response.setData(getAttendResponse(exam, attendance));
         
         return response;
     }
     
-    private AttendResponse getAttendResponse(Attendance attendance)
+    private AttendResponse getAttendResponse(Exam exam, Attendance attendance)
     {
         AttendResponse response = new AttendResponse(
-                attendance.getAttendanceId(), attendance.getStudentEmail(), attendance.getStartTime(), attendance.getEndTime()
+                attendance.getAttendanceId(), attendance.getStudentEmail(),
+                exam.getQuiz().getTitle(), exam.getQuiz().getDuration(),
+                attendance.getStartTime(), attendance.getEndTime()
         );
         
         // Sort the question base on the shuffled result

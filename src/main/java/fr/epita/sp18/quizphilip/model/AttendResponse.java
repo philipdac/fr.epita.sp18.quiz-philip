@@ -7,15 +7,19 @@ public class AttendResponse
 {
     private Long attendanceId;
     private String studentEmail;
+    private String title;
+    private Integer duration;
     private Timestamp startTime;
     private Timestamp endTime;
     
     private List<ExamQuestion> questions;
     
-    public AttendResponse(Long attendanceId, String studentEmail, Timestamp startTime, Timestamp endTime)
+    public AttendResponse(Long attendanceId, String studentEmail, String title, Integer duration, Timestamp startTime, Timestamp endTime)
     {
         this.attendanceId = attendanceId;
         this.studentEmail = studentEmail;
+        this.title = title;
+        this.duration = duration;
         this.startTime = startTime;
         this.endTime = endTime;
     }
@@ -38,6 +42,26 @@ public class AttendResponse
     public void setStudentEmail(String studentEmail)
     {
         this.studentEmail = studentEmail;
+    }
+    
+    public String getTitle()
+    {
+        return title;
+    }
+    
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
+    
+    public Integer getDuration()
+    {
+        return duration;
+    }
+    
+    public void setDuration(Integer duration)
+    {
+        this.duration = duration;
     }
     
     public Timestamp getStartTime()
