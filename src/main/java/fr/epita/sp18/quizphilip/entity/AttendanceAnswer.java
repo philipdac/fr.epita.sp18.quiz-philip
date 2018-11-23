@@ -19,8 +19,24 @@ public class AttendanceAnswer extends AuditModel
     private boolean correctAnswer;
     private Float scoreEarned;
     
+    public AttendanceAnswer()
+    {
+    }
+    
+    public AttendanceAnswer(Long attendanceId, Long questionId, Long questionChoiceId, String openAnswer)
+    {
+        this.attendanceId = attendanceId;
+        this.questionId = questionId;
+        this.questionChoiceId = questionChoiceId;
+        this.openAnswer = openAnswer;
+        
+        this.correctAnswer = false;
+        this.scoreEarned = 0f;
+    }
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "attendanceQuestionId")
+    
     
     public Long getAttendanceAnswerId()
     {

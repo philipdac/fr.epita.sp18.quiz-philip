@@ -1,9 +1,11 @@
 package fr.epita.sp18.quizphilip.service;
 
 import fr.epita.sp18.quizphilip.common.ExamStatus;
+import fr.epita.sp18.quizphilip.common.QuestionType;
 import fr.epita.sp18.quizphilip.common.ShuffleType;
 import fr.epita.sp18.quizphilip.entity.*;
 import fr.epita.sp18.quizphilip.model.*;
+import fr.epita.sp18.quizphilip.repository.AttendanceQuestionRepository;
 import fr.epita.sp18.quizphilip.repository.AttendanceRepository;
 import fr.epita.sp18.quizphilip.repository.ExamRepository;
 import fr.epita.sp18.quizphilip.repository.QuestionRepository;
@@ -17,15 +19,17 @@ import java.util.*;
 public class AttendanceService
 {
     private final ExamRepository examRepo;
-    private final AttendanceRepository attendRepo;
     private final QuestionRepository questionRepo;
+    private final AttendanceRepository attendRepo;
+    private final AttendanceQuestionRepository attendQuestionRepo;
     
     @Autowired
-    public AttendanceService(ExamRepository examRepo, AttendanceRepository attendRepo, QuestionRepository questionRepo)
+    public AttendanceService(ExamRepository examRepo, QuestionRepository questionRepo, AttendanceRepository attendRepo, AttendanceQuestionRepository attendQuestionRepo)
     {
         this.examRepo = examRepo;
-        this.attendRepo = attendRepo;
         this.questionRepo = questionRepo;
+        this.attendRepo = attendRepo;
+        this.attendQuestionRepo = attendQuestionRepo;
     }
     
     private Specification<Exam> hasRoomName(String name)
@@ -93,7 +97,7 @@ public class AttendanceService
         // Sort the question base on the shuffled result
         List<AttendanceQuestion> questions = attendance.getQuestions();
         questions.sort(new SortTheQuestions());
-    
+        
         List<ExamQuestion> examQuestions = new ArrayList<>();
         for (AttendanceQuestion aQuest : questions) {
             Question question = aQuest.getQuestion();
@@ -102,7 +106,7 @@ public class AttendanceService
             );
             
             // Load the question's choices
-            eQuest.setChoices(shuffleQuestionChoices(aQuest.getShuffledChoices(), question.getChoices()));
+            eQuest.setChoices(shuffleQuestionChoices(aQuest.getShuffledChoices(), question));
             
             // Load student's answer to this question
             
@@ -115,21 +119,29 @@ public class AttendanceService
         return response;
     }
     
-    private List<ExamQuestionChoice> shuffleQuestionChoices(String shuffled, List<QuestionChoice> choices) {
+    private List<ExamQuestionChoice> shuffleQuestionChoices(String shuffled, Question question)
+    {
+        List<QuestionChoice> choices = question.getChoices();
         
         String[] array = shuffled.split(",");
         List<ExamQuestionChoice> list = new ArrayList<>();
         
-        for (int i = 0; i < choices.size(); i++) {
-            int j = i;
-            if (i < array.length && !array[i].isEmpty()) {
-                j = Integer.parseInt(array[i]);
-            }
-            
-            QuestionChoice choice = choices.get(j);
-            ExamQuestionChoice eChoice = new ExamQuestionChoice(choice.getQuestionChoiceId(), choice.getDescription());
-            
+        if (question.getTypeId() == QuestionType.OPEN_QUESTION) {
+            // Open question
+            ExamQuestionChoice eChoice = new ExamQuestionChoice(0L, "OPEN_QUESTION", false, "");
             list.add(eChoice);
+        } else {
+            for (int i = 0; i < choices.size(); i++) {
+                int j = i;
+                if (i < array.length && !array[i].isEmpty()) {
+                    j = Integer.parseInt(array[i]);
+                }
+                
+                QuestionChoice choice = choices.get(j);
+                ExamQuestionChoice eChoice = new ExamQuestionChoice(choice.getQuestionChoiceId(), choice.getDescription(), false, "");
+                
+                list.add(eChoice);
+            }
         }
         
         return list;
@@ -179,7 +191,7 @@ public class AttendanceService
                 String order = shuffledChoices.toString();
                 
                 // Remove the '[' and ']' from the string
-                order = order.substring(1, order.length()-1);
+                order = order.substring(1, order.length() - 1);
                 
                 aQuest.setShuffledChoices(order);
             } else {
@@ -222,8 +234,96 @@ public class AttendanceService
         return null;
     }
     
+    private List<AttendanceAnswer> answerOpenQuestion(AttendanceQuestion question, AnswerRequest request)
+    {
+        List<AttendanceAnswer> answers = question.getAnswers();
+        AttendanceAnswer answer;
+        
+        // Open question has only one answer
+        if (answers.isEmpty()) {
+            // First time save
+            answer = new AttendanceAnswer(request.getAttendanceId(), request.getQuestionId(), 0L, request.getOpenAnswer());
+            answers.add(answer);
+        } else {
+            // Saved. Update the openAnswer now
+            answer = answers.get(0);
+            answer.setOpenAnswer(request.getOpenAnswer());
+            
+            answers.set(0, answer);
+        }
+        
+        return answers;
+    }
+    
+    private QuestionChoice getQuestionChoiceById(List<QuestionChoice> choices, Long choiceId) {
+        for (QuestionChoice choice: choices ) {
+            if (choice.getQuestionChoiceId() == choiceId) { return choice; };
+        }
+        
+        return new QuestionChoice();
+    }
+    
+    
+    private List<AttendanceAnswer> answerMultipleChoices(AttendanceQuestion question, AnswerRequest request)
+    {
+        List<AttendanceAnswer> answers = question.getAnswers();
+        List<Long> selections = request.getSelections();
+        List<QuestionChoice> choices = question.getQuestion().getChoices();
+        
+        int totalAnswers = answers.size();
+        int totalSelections = selections.size();
+    
+        int minIdx = totalAnswers <= totalSelections ? totalAnswers : totalSelections;
+        int maxIdx = totalAnswers > totalSelections ? totalAnswers : totalSelections;
+    
+        if (totalAnswers > totalSelections) {
+            // Number of new selections this time are LESS than the saved ones
+            // Delete the redundant answers
+            answers.subList(minIdx, maxIdx).clear();
+        }
+    
+        if (totalAnswers < totalSelections) {
+            // Number of new selections this time are MORE than the saved ones
+            // Add more answers
+            for (int idx = minIdx; idx < maxIdx; idx++) {
+                AttendanceAnswer answer = new AttendanceAnswer(request.getAttendanceId(), request.getQuestionId(), 0L, "");
+                answers.add(answer);
+            }
+        }
+    
+        // Set new information
+        totalAnswers = answers.size();
+        for (int idx = 0; idx < totalAnswers; idx++) {
+            AttendanceAnswer answer = answers.get(idx);
+            answer.setQuestionChoiceId(selections.get(idx));
+    
+            // Set correct answer and scoreEarned
+            QuestionChoice questChoice = getQuestionChoiceById(choices, answer.getQuestionChoiceId());
+            boolean correctAnswer = questChoice.getCorrectChoice();
+    
+            answer.setCorrectAnswer(correctAnswer);
+            answer.setScoreEarned(correctAnswer ? questChoice.getScore() : 0f);
+    
+            answers.set(idx, answer);
+        }
+
+        return answers;
+    }
+    
     public Long answer(Long attendanceId, Long questionId, AnswerRequest request)
     {
+        AttendanceQuestion question = attendQuestionRepo.findOne(attendanceId, questionId);
+        List<AttendanceAnswer> answers;
+        
+        if (question.getQuestion().getTypeId() == QuestionType.OPEN_QUESTION) {
+            answers = answerOpenQuestion(question, request);
+        } else {
+            answers = answerMultipleChoices(question, request);
+        }
+        
+        question.setAnswers(answers);
+        attendQuestionRepo.save(question);
+        
         return 0L;
     }
 }

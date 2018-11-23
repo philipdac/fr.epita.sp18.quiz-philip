@@ -29,7 +29,7 @@ public class AttendanceController
         return service.attend(request);
     }
     
-    @PostMapping("/{attendanceId}/answer/{questionId}")
+    @PutMapping("/{attendanceId}/answer/{questionId}")
     public Long update(@PathVariable Long attendanceId, @PathVariable Long questionId, @RequestBody AnswerRequest request)
     {
         return service.answer(attendanceId, questionId, request);

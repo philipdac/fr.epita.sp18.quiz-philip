@@ -7,7 +7,7 @@ public class AnswerRequest
     private Long attendanceId;
     private Long questionId;
     private List<Long> selections;
-    private String OpenAnswer;
+    private String openAnswer;
     
     public Long getAttendanceId()
     {
@@ -41,11 +41,11 @@ public class AnswerRequest
     
     public String getOpenAnswer()
     {
-        return OpenAnswer;
+        return openAnswer;
     }
     
     public void setOpenAnswer(String openAnswer)
     {
-        OpenAnswer = openAnswer;
+        this.openAnswer = openAnswer;
     }
 }
