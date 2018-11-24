@@ -9,7 +9,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/questions")
+@RequestMapping(value = "/api/questions")
 public class QuestionController
 {
     private final QuestionService service;

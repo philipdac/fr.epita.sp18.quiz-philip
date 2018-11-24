@@ -16,8 +16,11 @@ public class Attendance extends AuditModel
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long attendanceId;
-
-    private Long examId;
+    
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "examId", nullable = false)
+    private Exam exam;
+    
     private String studentEmail;
     private Timestamp startTime;
     private Timestamp endTime;
@@ -31,7 +34,7 @@ public class Attendance extends AuditModel
     public Attendance() {}
     
     public Attendance(Exam exam, String studentEmail) {
-        this.examId = exam.getExamId();
+        this.exam = exam;
         this.studentEmail = studentEmail;
         this.startTime = new Timestamp(System.currentTimeMillis());
         
@@ -53,14 +56,14 @@ public class Attendance extends AuditModel
         this.attendanceId = attendanceId;
     }
     
-    public Long getExamId()
+    public Exam getExam()
     {
-        return examId;
+        return exam;
     }
     
-    public void setExamId(Long examId)
+    public void setExam(Exam exam)
     {
-        this.examId = examId;
+        this.exam = exam;
     }
     
     public String getStudentEmail()

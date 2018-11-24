@@ -1,6 +1,10 @@
 package fr.epita.sp18.quizphilip.service;
 
+import fr.epita.sp18.quizphilip.entity.Attendance;
+import fr.epita.sp18.quizphilip.entity.Question;
 import fr.epita.sp18.quizphilip.entity.Quiz;
+import fr.epita.sp18.quizphilip.model.ApiResponse;
+import fr.epita.sp18.quizphilip.model.AttendResponse;
 import fr.epita.sp18.quizphilip.repository.ExamRepository;
 import fr.epita.sp18.quizphilip.repository.QuestionRepository;
 import fr.epita.sp18.quizphilip.repository.QuizRepository;
@@ -46,7 +50,7 @@ public class QuizService
                     quiz.getDuration(),
                     questionCount,
                     examCount,
-                    quiz.getTeacherId()
+                    quiz.getTeacher().getId()
             );
             item.setTeacherName("Teacher");
             
@@ -60,5 +64,25 @@ public class QuizService
     {
         Quiz saved = quizRepo.save(quiz);
         return saved.getQuizId();
+    }
+    
+    public ApiResponse delete(Long quizId)
+    {
+        ApiResponse<AttendResponse> response = new ApiResponse<>();
+    
+        Long examCount = examRepo.countByQuiz(quizId);
+        if (examCount > 0) {
+            response.setHasError(true);
+            response.setErrorMessage("There is exam already taken place with this quiz. Can't delete this quiz!");
+        } else {
+            List<Question> questions = questionRepo.findAllBy(quizId);
+            for (Question question: questions ) {
+                questionRepo.deleteById(question.getQuestionId());
+            }
+            
+            quizRepo.deleteById(quizId);
+        }
+        
+        return response;
     }
 }

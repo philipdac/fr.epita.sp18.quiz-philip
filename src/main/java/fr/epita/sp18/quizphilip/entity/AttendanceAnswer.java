@@ -1,10 +1,12 @@
 package fr.epita.sp18.quizphilip.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fr.epita.sp18.quizphilip.common.ChoiceNumber;
 
 import javax.persistence.*;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class AttendanceAnswer extends AuditModel
 {
     @Id

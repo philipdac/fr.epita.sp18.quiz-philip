@@ -1,8 +1,11 @@
 package fr.epita.sp18.quizphilip.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Identity extends AuditModel
 {
     @Id
@@ -12,7 +15,17 @@ public class Identity extends AuditModel
     private String email;
     private String normalizedEmail;
     private String passwordHash;
-
+    
+    public Long getId()
+    {
+        return id;
+    }
+    
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
+    
     public String getEmail()
     {
         return email;

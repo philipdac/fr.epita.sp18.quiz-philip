@@ -1,6 +1,5 @@
 package fr.epita.sp18.quizphilip.model;
 
-import fr.epita.sp18.quizphilip.common.ChoiceNumber;
 import fr.epita.sp18.quizphilip.entity.AuditModel;
 
 import javax.persistence.*;

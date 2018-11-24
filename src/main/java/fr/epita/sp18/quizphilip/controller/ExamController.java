@@ -1,6 +1,7 @@
 package fr.epita.sp18.quizphilip.controller;
 
 import fr.epita.sp18.quizphilip.entity.Exam;
+import fr.epita.sp18.quizphilip.model.ApiResponse;
 import fr.epita.sp18.quizphilip.service.ExamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/exams")
+@RequestMapping(value = "/api/exams")
 public class ExamController
 {
     private final ExamService service;
@@ -46,9 +47,9 @@ public class ExamController
     }
     
     @DeleteMapping("/{examId}")
-    public void delete(@PathVariable Long examId)
+    public ApiResponse delete(@PathVariable Long examId)
     {
-        service.delete(examId);
+        return service.delete(examId);
     }
     
 }

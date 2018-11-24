@@ -5,7 +5,7 @@
 
 	<groupId>fr.epita.sp18</groupId>
 	<artifactId>quiz-philip</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>quiz-philip</name>
@@ -55,6 +55,24 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>validate</phase>
+						<goals><goal>copy-resources</goal></goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/classes/static/</outputDirectory >
+							<resources>
+								<resource>
+									<directory>C:/Users/Philip/github/fr.epita.sp18.quiz-philip-client/dist/quiz-philip-client</directory >
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

@@ -1,6 +1,10 @@
 package fr.epita.sp18.quizphilip.service;
 
+import fr.epita.sp18.quizphilip.entity.Attendance;
 import fr.epita.sp18.quizphilip.entity.Exam;
+import fr.epita.sp18.quizphilip.model.ApiResponse;
+import fr.epita.sp18.quizphilip.model.AttendResponse;
+import fr.epita.sp18.quizphilip.repository.AttendanceRepository;
 import fr.epita.sp18.quizphilip.repository.ExamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,11 +15,13 @@ import java.util.List;
 public class ExamService
 {
     private final ExamRepository examRepo;
+    private final AttendanceRepository attendRepo;
     
     @Autowired
-    public ExamService(ExamRepository examRepo)
+    public ExamService(ExamRepository examRepo, AttendanceRepository attendRepo)
     {
         this.examRepo = examRepo;
+        this.attendRepo = attendRepo;
     }
     
     public Exam get(Long examId)
@@ -36,10 +42,19 @@ public class ExamService
         return saved.getExamId();
     }
     
-    public void delete(Long examId)
+    public ApiResponse delete(Long examId)
     {
-        if (examRepo.existsById(examId))
+        ApiResponse<AttendResponse> response = new ApiResponse<>();
+    
+        List<Attendance> attendanceList = attendRepo.findAllBy(examId);
+        if (attendanceList.isEmpty()) {
             examRepo.deleteById(examId);
+        } else {
+            response.setHasError(true);
+            response.setErrorMessage("There are students have taken this exam already. Can't delete it!");
+        }
+        
+        return response;
     }
     
 }

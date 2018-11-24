@@ -12,7 +12,10 @@ public class Quiz extends AuditModel
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long quizId;
     
-    private Long teacherId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "teacherId", nullable = false, referencedColumnName = "id")
+    private Identity teacher;
+
     private String title;
     private Integer duration;
     
@@ -26,14 +29,14 @@ public class Quiz extends AuditModel
         this.quizId = quizId;
     }
     
-    public Long getTeacherId()
+    public Identity getTeacher()
     {
-        return teacherId;
+        return teacher;
     }
     
-    public void setTeacherId(Long teacherId)
+    public void setTeacher(Identity teacher)
     {
-        this.teacherId = teacherId;
+        this.teacher = teacher;
     }
     
     public String getTitle()

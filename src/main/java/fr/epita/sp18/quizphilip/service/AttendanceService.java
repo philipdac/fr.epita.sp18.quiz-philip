@@ -37,11 +37,6 @@ public class AttendanceService
         return (exam, cq, cb) -> cb.equal(exam.get("examRoom"), name);
     }
     
-    private Specification<Attendance> hasStudentEmail(String email)
-    {
-        return (examAttendance, cq, cb) -> cb.equal(examAttendance.get("studentEmail"), email);
-    }
-    
     public List<Attendance> list(long examId)
     {
         return attendRepo.findAllBy(examId);
@@ -56,7 +51,11 @@ public class AttendanceService
         if (response != null) return response;
         
         Exam exam = examRepo.findOne(hasRoomName(request.getExamRoom())).orElse(new Exam());
-        Attendance attendance = attendRepo.findOne(hasStudentEmail(request.getEmail())).orElse(null);
+        Attendance attendance = null;
+        List<Attendance> attendanceList = attendRepo.findByExamAndEmail(exam.getExamId(), request.getEmail());
+        if (!attendanceList.isEmpty()) {
+            attendance = attendanceList.get(0);
+        }
         
         response = new ApiResponse<>();
         if (attendance == null) {
@@ -106,7 +105,15 @@ public class AttendanceService
             );
             
             // Load the question's choices
-            eQuest.setChoices(shuffleQuestionChoices(aQuest.getShuffledChoices(), question));
+            List<ExamQuestionChoice> examChoices;
+            
+            if (question.getTypeId() == QuestionType.OPEN_QUESTION) {
+                examChoices = getExamOpenQuestion(aQuest);
+            } else {
+                examChoices = getExamSelectedChoices(aQuest);
+            }
+            
+            eQuest.setChoices(examChoices);
             
             // Load student's answer to this question
             
@@ -119,29 +126,51 @@ public class AttendanceService
         return response;
     }
     
-    private List<ExamQuestionChoice> shuffleQuestionChoices(String shuffled, Question question)
+    private List<ExamQuestionChoice> getExamOpenQuestion(AttendanceQuestion aQuest)
     {
-        List<QuestionChoice> choices = question.getChoices();
+        List<ExamQuestionChoice> list = new ArrayList<>();
+        List<AttendanceAnswer> answers = aQuest.getAnswers();
         
-        String[] array = shuffled.split(",");
+        String openAnswer = "";
+        if (!answers.isEmpty()) {
+            openAnswer = answers.get(0).getOpenAnswer();
+        }
+        
+        ExamQuestionChoice eChoice = new ExamQuestionChoice(0L, "OPEN_QUESTION", false, openAnswer);
+        list.add(eChoice);
+        
+        return list;
+    }
+    
+    private List<ExamQuestionChoice> getExamSelectedChoices(AttendanceQuestion aQuest)
+    {
+        Question question = aQuest.getQuestion();
+        List<QuestionChoice> choices = question.getChoices();
+        List<AttendanceAnswer> answers = aQuest.getAnswers();
+        
         List<ExamQuestionChoice> list = new ArrayList<>();
         
-        if (question.getTypeId() == QuestionType.OPEN_QUESTION) {
-            // Open question
-            ExamQuestionChoice eChoice = new ExamQuestionChoice(0L, "OPEN_QUESTION", false, "");
-            list.add(eChoice);
-        } else {
-            for (int i = 0; i < choices.size(); i++) {
-                int j = i;
-                if (i < array.length && !array[i].isEmpty()) {
-                    j = Integer.parseInt(array[i]);
-                }
-                
-                QuestionChoice choice = choices.get(j);
-                ExamQuestionChoice eChoice = new ExamQuestionChoice(choice.getQuestionChoiceId(), choice.getDescription(), false, "");
-                
-                list.add(eChoice);
+        String[] array = aQuest.getShuffledChoices().split(", ");
+        for (int i = 0; i < choices.size(); i++) {
+            
+            int choicePos = i;
+            if (i < array.length && !array[i].isEmpty()) {
+                choicePos = Integer.parseInt(array[i]);
             }
+            
+            QuestionChoice choice = choices.get(choicePos);
+            Long choiceId = choice.getQuestionChoiceId();
+            boolean selected = false;
+            
+            for (AttendanceAnswer answer : answers) {
+                if (answer.getQuestionChoiceId().equals(choiceId)) {
+                    selected = true;
+                }
+            }
+            
+            ExamQuestionChoice eChoice = new ExamQuestionChoice(choiceId, choice.getDescription(), selected, "");
+            
+            list.add(eChoice);
         }
         
         return list;
@@ -255,9 +284,11 @@ public class AttendanceService
         return answers;
     }
     
-    private QuestionChoice getQuestionChoiceById(List<QuestionChoice> choices, Long choiceId) {
-        for (QuestionChoice choice: choices ) {
-            if (choice.getQuestionChoiceId() == choiceId) { return choice; };
+    private QuestionChoice getQuestionChoiceById(List<QuestionChoice> choices, Long choiceId)
+    {
+        for (QuestionChoice choice : choices) {
+            if (choice.getQuestionChoiceId() == choiceId) { return choice; }
+            ;
         }
         
         return new QuestionChoice();
@@ -272,16 +303,16 @@ public class AttendanceService
         
         int totalAnswers = answers.size();
         int totalSelections = selections.size();
-    
+        
         int minIdx = totalAnswers <= totalSelections ? totalAnswers : totalSelections;
         int maxIdx = totalAnswers > totalSelections ? totalAnswers : totalSelections;
-    
+        
         if (totalAnswers > totalSelections) {
             // Number of new selections this time are LESS than the saved ones
             // Delete the redundant answers
             answers.subList(minIdx, maxIdx).clear();
         }
-    
+        
         if (totalAnswers < totalSelections) {
             // Number of new selections this time are MORE than the saved ones
             // Add more answers
@@ -290,23 +321,23 @@ public class AttendanceService
                 answers.add(answer);
             }
         }
-    
+        
         // Set new information
         totalAnswers = answers.size();
         for (int idx = 0; idx < totalAnswers; idx++) {
             AttendanceAnswer answer = answers.get(idx);
             answer.setQuestionChoiceId(selections.get(idx));
-    
+            
             // Set correct answer and scoreEarned
             QuestionChoice questChoice = getQuestionChoiceById(choices, answer.getQuestionChoiceId());
             boolean correctAnswer = questChoice.getCorrectChoice();
-    
+            
             answer.setCorrectAnswer(correctAnswer);
             answer.setScoreEarned(correctAnswer ? questChoice.getScore() : 0f);
-    
+            
             answers.set(idx, answer);
         }
-
+        
         return answers;
     }
     
