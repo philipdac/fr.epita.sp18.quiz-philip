@@ -16,9 +16,4 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     
     @Query(value= "select count(q.QUIZ_ID) from QUESTION q where q.QUIZ_ID = ?1", nativeQuery = true)
     Long countByQuiz(Long quizId);
-    
-    @Modifying
-    @Transactional
-    @Query(value= "DELETE FROM QUESTION q where q.QUIZ_ID = ?1", nativeQuery = true)
-    void deleteByQuizId(Long quizId);
 }
